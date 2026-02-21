@@ -1,18 +1,16 @@
 ---
 name: unifi-protect-multi
-description: Single multi-action UniFi Protect tool
+description: Multi-action UniFi Protect operations with built-in routing and shared auth
+runtimeMinVersion: 0.1.0
+httpAuth:
+  protect:
+    type: bearer
+    token: "{{secret:UNIFI_PROTECT_TOKEN}}"
 tools:
   - name: protect_ops
     description: Run one UniFi Protect action (list/get/snapshot/light/recording/privacy)
-    type: http
-    method: "{{method}}"
-    url: "https://{{host}}{{path}}"
-    headers:
-      Accept: application/json
-      Content-Type: application/json
-      Authorization: "Bearer {{token}}"
-    body: "{{body}}"
-    timeout: 30
+    type: workflow
+    actionField: action
     parameters:
       type: object
       properties:
@@ -29,22 +27,9 @@ tools:
         host:
           type: string
           description: UniFi OS host (e.g. nvr.local)
-        token:
-          type: string
-          description: Protect bearer token
         cameraId:
           type: string
-          description: Required for camera-specific actions
-        method:
-          type: string
-          enum: ["GET", "PATCH"]
-          description: HTTP method derived from action
-        path:
-          type: string
-          description: API path derived from action
-        body:
-          type: string
-          description: JSON request body for PATCH actions
+          description: Camera ID for camera-specific actions
         enabled:
           type: boolean
           description: Used by set_status_light / set_privacy_mode
@@ -52,8 +37,69 @@ tools:
           type: string
           enum: ["always", "detections", "never"]
           description: Used by set_recording_mode
-      required: ["action", "host", "token", "method", "path"]
+      required: ["action", "host"]
+    actions:
+      list_cameras:
+        - name: list_cameras
+          type: http
+          method: GET
+          url: "https://{{host}}/proxy/protect/api/cameras"
+          auth: protect
+          headers:
+            Accept: application/json
+          result: json
+      get_camera:
+        - name: get_camera
+          type: http
+          method: GET
+          url: "https://{{host}}/proxy/protect/api/cameras/{{cameraId}}"
+          auth: protect
+          headers:
+            Accept: application/json
+          result: json
+      get_snapshot:
+        - name: get_snapshot
+          type: http
+          method: GET
+          url: "https://{{host}}/proxy/protect/api/cameras/{{cameraId}}/snapshot"
+          auth: protect
+          headers:
+            Accept: image/jpeg
+      set_status_light:
+        - name: set_status_light
+          type: http
+          method: PATCH
+          url: "https://{{host}}/proxy/protect/api/cameras/{{cameraId}}"
+          auth: protect
+          headers:
+            Accept: application/json
+            Content-Type: application/json
+          body: "{\"statusLight\":{\"enabled\":{{enabled|json}}}}"
+          result: json
+      set_recording_mode:
+        - name: set_recording_mode
+          type: http
+          method: PATCH
+          url: "https://{{host}}/proxy/protect/api/cameras/{{cameraId}}"
+          auth: protect
+          headers:
+            Accept: application/json
+            Content-Type: application/json
+          body: "{\"recordingSettings\":{\"mode\":\"{{mode}}\"}}"
+          result: json
+      set_privacy_mode:
+        - name: set_privacy_mode
+          type: http
+          method: PATCH
+          url: "https://{{host}}/proxy/protect/api/cameras/{{cameraId}}"
+          auth: protect
+          headers:
+            Accept: application/json
+            Content-Type: application/json
+          body: "{\"privacyZonesEnabled\":{{enabled|json}}}"
+          result: json
 ---
 
-Use protect_ops as a single entrypoint for UniFi Protect.
-Always list cameras first to obtain valid camera IDs.
+Use protect_ops as a single entrypoint for UniFi Protect operations.
+Set `UNIFI_PROTECT_TOKEN` in TeaNode config `secrets` (or environment) and pass `host`.
+For camera-specific actions, call list_cameras first to obtain a valid camera ID.

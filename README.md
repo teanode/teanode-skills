@@ -7,20 +7,53 @@ Official community skill registry content for TeaNode.
 - `index.json`: registry index consumed by TeaNode.
 - `skills/<name>/<version>/skill.md`: installable skill payload.
 
-## Skill Format
+## Skill format
 
 Each skill payload is a markdown file with YAML frontmatter and markdown body.
 
-## Index Contract (current)
+Core frontmatter fields:
 
-The current TeaNode registry client expects entries with:
+- `name`
+- `description`
+- `tools`
+
+Optional advanced fields:
+
+- `runtimeMinVersion`: minimum TeaNode runtime version required.
+- `httpAuth`: shared HTTP auth profiles reusable by `http` actions/tools.
+
+Supported tool types:
+
+- `shell`
+- `http`
+- `workflow`
+
+`workflow` supports:
+
+- `steps` and `finally`
+- `forEach` and `switch` control flow
+- `actions` + `actionField` for first-class multi-action routing
+- retries (`retries`, `retryDelayMs`) and error policy (`onError`)
+- output shaping (`result: json`, `extract`, `select`, `saveAs`)
+- output contracts (`outputSchema`)
+
+Template features include:
+
+- path lookup (`{{steps.fetch.id}}`)
+- filters (`json`, `urlencode`, `base64`, `default`, `join`)
+- secret loading (`{{secret:NAME}}`) with environment fallback
+- direct env lookup (`{{env:NAME}}`)
+
+## Index contract
+
+TeaNode registry client expects entries with:
 
 - `name`
 - `description`
 - `version`
 - `url`
 - `sha256`
-- `signature` (required by policy; fill with a valid signature for production)
+- `signature`
 - optional `tags`
 
 ## Signing
@@ -35,12 +68,11 @@ scripts/generate-key.sh
 scripts/sign-index.sh --key keys/teanode-skills-ed25519-private.pem --print-public-key
 
 # 3) Sign index.json in place
-
-# 4) Verify signatures in index.json
-scripts/verify-index.sh --public-key-file keys/teanode-skills-ed25519-public.pem --index index.json
 scripts/sign-index.sh --key keys/teanode-skills-ed25519-private.pem --in-place
-```
 
+# 4) Verify signatures
+scripts/verify-index.sh --public-key-file keys/teanode-skills-ed25519-public.pem --index index.json
+```
 
 This bootstrap repository is populated with starter skills. Before production use,
 generate signatures for each index entry and publish trusted public keys in TeaNode config.

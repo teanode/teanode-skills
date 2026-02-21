@@ -12,7 +12,7 @@ tools:
       properties: {}
 
   - name: git_diff
-    description: Show unstaged changes in the current repository, optionally filtered to a path
+    description: Show unstaged changes for a required path in the current repository
     type: shell
     command: ["git", "diff", "{{path}}"]
     timeout: 30
@@ -21,10 +21,11 @@ tools:
       properties:
         path:
           type: string
-          description: Optional file or directory path to filter the diff
+          description: Required file or directory path to filter the diff (use "." for full repo)
+      required: ["path"]
 
   - name: git_log
-    description: Show recent commit history
+    description: Show recent commit history with an explicit count
     type: shell
     command: ["git", "log", "--oneline", "-n", "{{count}}"]
     timeout: 10
@@ -33,7 +34,8 @@ tools:
       properties:
         count:
           type: string
-          description: "Number of commits to show (default: 10)"
+          description: Number of commits to show
+      required: ["count"]
 ---
 
 You have access to git tools for repository operations. Use git_status to

@@ -6,8 +6,8 @@
       "description": "Git repository operations",
       "version": "1.0.0",
       "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/git/1.0.0/skill.md",
-      "sha256": "fc07f82c93dbdee2cac71cb5f3bbacc84734e88db36bb9821b7fe10ad03ca03e",
-      "signature": "rJRGNnP7B40fB9y0gqeqezXbuYxSI7S7rcIFSi9x5+ScfbnjBoz6pLr5LWPWHvMWqba1RIpGSuYCSdem2tBbCw==",
+      "sha256": "1af06ee3e2a6d7b7cc10b4fd78cab7275bead3d12109c199cea408445958323d",
+      "signature": "he/k5u45FXBfEw12VN9cmppaN/8nBN16UyoK9YHqQKwzLN/0qq/Rtz9Yhjk3wuX2ear7m7NYd4oc/68XXwK8Bg==",
       "tags": [
         "git",
         "repo",
@@ -41,11 +41,11 @@
     },
     {
       "name": "unifi-protect-multi",
-      "description": "Single multi-action UniFi Protect tool",
+      "description": "Multi-action UniFi Protect operations with built-in routing and shared auth",
       "version": "1.0.0",
       "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/unifi-protect-multi/1.0.0/skill.md",
-      "sha256": "91f622f8c1f30ddb704e0b9fe12e57625c912ebfb0c22b884ef5dc0e1af27814",
-      "signature": "DDu+TH1iz+2iP8x+K1oi3vOE3PXdrbYaeqAGQwCFbIdW3ked5/rMzultMZIZ3Z+sKUTybU1PmZJjvhmUmt6+DQ==",
+      "sha256": "56734f5f9c70d123af327c8b0a96a1e57c1cd6e6dd1fce8a613aeadb930c678b",
+      "signature": "1RvVtozFkkt3LV8/U9hNPkOPI0BCezIUlThXjyx9iO0gsWrvOy+SVgfpdwOVicKTJlAyePeEruQJZO7ViF5tDQ==",
       "tags": [
         "unifi",
         "camera",
