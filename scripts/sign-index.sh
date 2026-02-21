@@ -79,6 +79,7 @@ fi
 if [[ "$PRINT_PUBLIC_KEY" -eq 1 ]]; then
   openssl pkey -in "$KEY" -pubout -outform DER | tail -c 32 | base64 -w0
   echo
+  exit 0
 fi
 
 if [[ "$IN_PLACE" -eq 1 ]]; then
