@@ -1,8 +1,10 @@
 ---
-name: unifi-protect-multi
-description: Multi-action UniFi Protect operations with built-in routing and shared auth
-runtimeMinVersion: 0.1.0
-httpAuth:
+name: unifi-protect
+description: UniFi Protect camera operations with built-in routing and shared auth
+secrets:
+  - key: UNIFI_PROTECT_TOKEN
+    description: Bearer token for UniFi Protect API
+authenticationProfiles:
   protect:
     type: bearer
     token: "{{secret:UNIFI_PROTECT_TOKEN}}"
@@ -37,6 +39,9 @@ tools:
           type: string
           enum: ["always", "detections", "never"]
           description: Used by set_recording_mode
+        isDoorbell:
+          type: boolean
+          description: Filter list_cameras to doorbells (true) or non-doorbells (false)
       required: ["action", "host"]
     actions:
       list_cameras:
@@ -74,7 +79,7 @@ tools:
           headers:
             Accept: application/json
             Content-Type: application/json
-          body: "{\"statusLight\":{\"enabled\":{{enabled|json}}}}"
+          body: '{"ledSettings":{"isEnabled":{{enabled|json}}}}'
           result: json
       set_recording_mode:
         - name: set_recording_mode
@@ -85,10 +90,11 @@ tools:
           headers:
             Accept: application/json
             Content-Type: application/json
-          body: "{\"recordingSettings\":{\"mode\":\"{{mode}}\"}}"
+          body: '{"recordingSettings":{"mode":"{{mode}}"}}'
           result: json
       set_privacy_mode:
-        - name: set_privacy_mode
+        - name: enable_privacy
+          if: "enabled == true"
           type: http
           method: PATCH
           url: "https://{{host}}/proxy/protect/api/cameras/{{cameraId}}"
@@ -96,10 +102,21 @@ tools:
           headers:
             Accept: application/json
             Content-Type: application/json
-          body: "{\"privacyZonesEnabled\":{{enabled|json}}}"
+          body: '{"privacyZones":[{"id":0,"name":"Privacy","color":"#85EFAC","points":[[0,0],[1,0],[1,1],[0,1]]}]}'
+          result: json
+        - name: disable_privacy
+          if: "enabled == false"
+          type: http
+          method: PATCH
+          url: "https://{{host}}/proxy/protect/api/cameras/{{cameraId}}"
+          auth: protect
+          headers:
+            Accept: application/json
+            Content-Type: application/json
+          body: '{"privacyZones":[]}'
           result: json
 ---
 
 Use protect_ops as a single entrypoint for UniFi Protect operations.
-Set `UNIFI_PROTECT_TOKEN` in TeaNode config `secrets` (or environment) and pass `host`.
+Set `UNIFI_PROTECT_TOKEN` in TeaNode secrets settings and pass `host`.
 For camera-specific actions, call list_cameras first to obtain a valid camera ID.

@@ -40,17 +40,29 @@
       ]
     },
     {
-      "name": "unifi-protect-multi",
-      "description": "Multi-action UniFi Protect operations with built-in routing and shared auth",
-      "version": "1.0.0",
-      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/unifi-protect-multi/skill.md",
-      "sha256": "56734f5f9c70d123af327c8b0a96a1e57c1cd6e6dd1fce8a613aeadb930c678b",
-      "signature": "GnnIEJjFc6zsuBKVR9yncbY8+WKDmmZDKA3dnlsZ805yvm7c6id1rPZ7uZxFnBj4dgVU92By5JPx9Indm0riDQ==",
+      "name": "unifi-protect",
+      "description": "UniFi Protect camera operations with built-in routing and shared auth",
+      "version": "1.1.0",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/unifi-protect/skill.md",
+      "sha256": "63a09d9fc31361165903356cf954715dd1e1f7d4a34176cf210ab7026ef431af",
+      "signature": "QUjXGRokPYSD5nzZHq902GwLmuL4d7S2Rk1mKCxsocJXD33xExIU2vtyJLupgpd7OfF1VIMQNHlqR6TvgUQYCA==",
       "tags": [
         "unifi",
         "camera",
+        "http"
+      ]
+    },
+    {
+      "name": "news",
+      "description": "News headlines and article search via NewsAPI.org",
+      "version": "1.0.0",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/news/skill.md",
+      "sha256": "e706442db777ce1bb79b055ad9447e9a823d7e25942b90060f8b7fcc15b45b84",
+      "signature": "xi2Vm5SK2zlUDcGj6MuXAcHvHRkwfFD4S2EBPkEDfm2D/BhEL14emRJgr0btZ9N1Pbm8iAWOafNNgjwBy25MAw==",
+      "tags": [
+        "news",
         "http",
-        "multi-action"
+        "api"
       ]
     }
   ]
