@@ -5,9 +5,9 @@
       "name": "git",
       "description": "Git repository operations",
       "version": "1.0.0",
-      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/git/1.0.0/skill.md",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/git/skill.md",
       "sha256": "1af06ee3e2a6d7b7cc10b4fd78cab7275bead3d12109c199cea408445958323d",
-      "signature": "he/k5u45FXBfEw12VN9cmppaN/8nBN16UyoK9YHqQKwzLN/0qq/Rtz9Yhjk3wuX2ear7m7NYd4oc/68XXwK8Bg==",
+      "signature": "8jB2ZH59RxFV73BRZEpETp5ELJthTqpu6gndgqiAgKoo5OPQtu1iOkUBEC+R9rLyYMR98M/cQbmA6jr4o6auBA==",
       "tags": [
         "git",
         "repo",
@@ -18,9 +18,9 @@
       "name": "weather",
       "description": "Weather information via wttr.in",
       "version": "1.0.0",
-      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/weather/1.0.0/skill.md",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/weather/skill.md",
       "sha256": "70654b16a36fc2ed69c2c97bfe248564447cb2918dcd6b55fc173102b536ff03",
-      "signature": "hm9KkVWdRUAtwunr8MW8w2oeePh1XF7YPOaIUekMgmZP13mGZWxTNQqe9FJxqlxur1bO8Q9Y0+W3KeUXvzIzBQ==",
+      "signature": "zMJ4Vbh8dFvuzaLZR65uXgXdVyLAp0nM7OZ29lHMEK4mQDfXBmGPTbYumkcW7ggdfn6E9VcMdFqhSvrrlyWWCg==",
       "tags": [
         "weather",
         "http"
@@ -30,9 +30,9 @@
       "name": "dictionary",
       "description": "English dictionary lookup",
       "version": "1.0.0",
-      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/dictionary/1.0.0/skill.md",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/dictionary/skill.md",
       "sha256": "2f53a6ce4bfa82e1a74609cff45f3b413451c812b577ad75f65551b4282104c2",
-      "signature": "dC6A9TVJ3dDvmfwCNjWzavVeyMJUcFhWPPhNEfwTxIFKcsKMjg4EE37nbJUsn1rl1kb+dlkCPdGQ+mzXLGM4Dw==",
+      "signature": "7lyBf4dgZV37AxnVz2dXkiT9cTeIz5CEWVPblqEI0hausa9gTiUoFe3T5oV+zGBf8rsvjohqO75jDvfHMX6NAA==",
       "tags": [
         "dictionary",
         "http",
@@ -43,9 +43,9 @@
       "name": "unifi-protect-multi",
       "description": "Multi-action UniFi Protect operations with built-in routing and shared auth",
       "version": "1.0.0",
-      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/unifi-protect-multi/1.0.0/skill.md",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/unifi-protect-multi/skill.md",
       "sha256": "56734f5f9c70d123af327c8b0a96a1e57c1cd6e6dd1fce8a613aeadb930c678b",
-      "signature": "1RvVtozFkkt3LV8/U9hNPkOPI0BCezIUlThXjyx9iO0gsWrvOy+SVgfpdwOVicKTJlAyePeEruQJZO7ViF5tDQ==",
+      "signature": "GnnIEJjFc6zsuBKVR9yncbY8+WKDmmZDKA3dnlsZ805yvm7c6id1rPZ7uZxFnBj4dgVU92By5JPx9Indm0riDQ==",
       "tags": [
         "unifi",
         "camera",

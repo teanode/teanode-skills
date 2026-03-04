@@ -5,7 +5,7 @@ Official community skill registry content for TeaNode.
 ## Layout
 
 - `index.json`: registry index consumed by TeaNode.
-- `skills/<name>/<version>/skill.md`: installable skill payload.
+- `skills/<name>/skill.md`: installable skill payload.
 
 ## Skill format
 

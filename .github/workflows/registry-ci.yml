@@ -33,7 +33,7 @@ jobs:
             url="$(jq -r '.url' <<<"$skill")"
             sha="$(jq -r '.sha256' <<<"$skill" | tr '[:upper:]' '[:lower:]')"
 
-            path="skills/${name}/${version}/skill.md"
+            path="skills/${name}/skill.md"
             expected_url="https://raw.githubusercontent.com/teanode/teanode-skills/main/${path}"
 
             if [[ ! -f "$path" ]]; then
