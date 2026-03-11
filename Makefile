@@ -6,13 +6,14 @@ PUB ?= keys/teanode-skills-ed25519-public.pem
 KEY_DIR ?= keys
 KEY_NAME ?= teanode-skills
 
-.PHONY: help keygen pubkey sign sign-out verify
+.PHONY: help keygen pubkey hash sign sign-out verify
 
 help:
 	@echo "Targets:"
 	@echo "  make keygen                 # generate Ed25519 keypair into $(KEY_DIR)/"
 	@echo "  make pubkey                 # print base64 public key for TeaNode config"
-	@echo "  make sign                   # sign $(INDEX) in place using $(KEY)"
+	@echo "  make hash                   # update sha256 hashes in $(INDEX) from local skill files"
+	@echo "  make sign                   # update hashes then sign $(INDEX) in place using $(KEY)"
 	@echo "  make sign-out OUT=...       # sign to output file"
 	@echo "  make verify                 # verify signatures in $(INDEX) using $(PUB)"
 
@@ -22,7 +23,27 @@ keygen:
 pubkey:
 	scripts/sign-index.sh --key "$(KEY)" --print-public-key
 
-sign:
+hash:
+	@COUNT=$$(jq '.skills | length' "$(INDEX)"); \
+	TMP=$$(mktemp); \
+	cp "$(INDEX)" "$$TMP"; \
+	for i in $$(seq 0 $$((COUNT - 1))); do \
+		NAME=$$(jq -r ".skills[$$i].name" "$$TMP"); \
+		FILE="skills/$$NAME/skill.md"; \
+		if [ ! -f "$$FILE" ]; then \
+			echo "skill file not found: $$FILE" >&2; \
+			rm -f "$$TMP"; \
+			exit 1; \
+		fi; \
+		HASH=$$(sha256sum "$$FILE" | cut -d' ' -f1); \
+		UPDATED=$$(mktemp); \
+		jq ".skills[$$i].sha256 = \"$$HASH\"" "$$TMP" > "$$UPDATED"; \
+		mv "$$UPDATED" "$$TMP"; \
+		echo "$$NAME: $$HASH"; \
+	done; \
+	mv "$$TMP" "$(INDEX)"
+
+sign: hash
 	scripts/sign-index.sh --key "$(KEY)" --index "$(INDEX)" --in-place
 
 sign-out:
