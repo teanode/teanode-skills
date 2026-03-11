@@ -3,7 +3,7 @@ name: weather
 description: Weather forecast via the National Weather Service API (US locations)
 tools:
   - name: get_weather
-    description: Get weather forecast for a US location (free-form input like "Alpharetta, GA" or "Chicago, IL")
+    description: Get weather forecast for a US location (free-form input like "Alpharetta, GA" or "Chicago, IL"). Returns geocoded coordinates, current conditions, and today's forecast from NWS.
     type: workflow
     timeout: 30
     parameters:
@@ -17,15 +17,15 @@ tools:
       - name: geocode
         type: http
         method: GET
-        url: "https://nominatim.openstreetmap.org/search?q={{location|urlencode}}&format=json&limit=1&countrycodes=us"
+        url: "https://nominatim.openstreetmap.org/search?q={{location}}&format=json&limit=1&countrycodes=us"
         headers:
           User-Agent: "TeaNode-Weather-Skill/1.0 (teanode-skills; github.com/teanode/teanode-skills)"
           Accept: application/json
         result: json
-        extract:
-          lat: "[0].lat"
-          lon: "[0].lon"
-          display_name: "[0].display_name"
+        select:
+          lat: "0.lat"
+          lon: "0.lon"
+          display_name: "0.display_name"
 
       - name: points
         type: http
@@ -35,7 +35,7 @@ tools:
           User-Agent: "TeaNode-Weather-Skill/1.0 (teanode-skills; github.com/teanode/teanode-skills)"
           Accept: application/geo+json
         result: json
-        extract:
+        select:
           forecast: "properties.forecast"
           forecastHourly: "properties.forecastHourly"
 
@@ -47,7 +47,7 @@ tools:
           User-Agent: "TeaNode-Weather-Skill/1.0 (teanode-skills; github.com/teanode/teanode-skills)"
           Accept: application/geo+json
         result: json
-        extract:
+        select:
           temperature: "properties.periods[0].temperature"
           temperatureUnit: "properties.periods[0].temperatureUnit"
           windSpeed: "properties.periods[0].windSpeed"
@@ -64,32 +64,13 @@ tools:
           User-Agent: "TeaNode-Weather-Skill/1.0 (teanode-skills; github.com/teanode/teanode-skills)"
           Accept: application/geo+json
         result: json
-        extract:
+        select:
           highTemp: "properties.periods[0].temperature"
           isDaytime: "properties.periods[0].isDaytime"
           detail: "properties.periods[0].detailedForecast"
           todayPrecip: "properties.periods[0].probabilityOfPrecipitation.value"
           lowTemp: "properties.periods[1].temperature"
-
-    select:
-      location: "{{steps.geocode.display_name}}"
-      coordinates:
-        lat: "{{steps.geocode.lat}}"
-        lon: "{{steps.geocode.lon}}"
-      current:
-        temperature: "{{steps.hourly.temperature}}"
-        temperatureUnit: "{{steps.hourly.temperatureUnit}}"
-        windSpeed: "{{steps.hourly.windSpeed}}"
-        windDirection: "{{steps.hourly.windDirection}}"
-        shortForecast: "{{steps.hourly.shortForecast}}"
-        humidity: "{{steps.hourly.humidity}}"
-        precipitationChance: "{{steps.hourly.precipitationChance}}"
-      today:
-        high: "{{steps.daily.highTemp}}"
-        low: "{{steps.daily.lowTemp}}"
-        precipitationChance: "{{steps.daily.todayPrecip}}"
-        detail: "{{steps.daily.detail}}"
-      source: "National Weather Service (api.weather.gov)"
 ---
 
 US weather forecast via Nominatim geocoding + NWS (api.weather.gov).
+Report the weather using steps.geocode for location, steps.hourly for current conditions, and steps.daily for today's forecast. Data source: National Weather Service.
