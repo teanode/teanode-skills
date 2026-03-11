@@ -19,8 +19,8 @@
       "description": "Weather forecast via the National Weather Service API (US locations)",
       "version": "2.0.0",
       "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/weather/skill.md",
-      "sha256": "abfb2cd93f4cf53ac6bd18999fa6f599a08f1ecc12f6f842de5178fb13000d61",
-      "signature": "r1MqrR5Y3B749c+NIuxUTjUXN5IZhzHpxeG3FWgeklPfcQk19FrSExeVgnfMHZM4buKM7FIQNQA8LL8BOVOCDQ==",
+      "sha256": "88db89c0562ffbf815cb822aef6299659346877b94b018f31a0325deb0bd2252",
+      "signature": "B9zjyF/88zfFQetV1YNhkTxw5vtG4wgm0ciG7Zib0IlZ/Uzlc6fEsfH3FuHAuBE+nIWpJW9M10I+Y4pAGiIhDQ==",
       "tags": [
         "weather",
         "workflow",
