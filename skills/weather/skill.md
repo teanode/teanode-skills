@@ -4,119 +4,7 @@ description: Weather forecast via the National Weather Service API (US locations
 tools:
   - name: get_weather
     description: Get weather forecast for a US location (free-form input like "Alpharetta, GA" or "Chicago, IL")
-    type: shell
-    command:
-      - "python3"
-      - "-c"
-      - |
-        import json, sys, urllib.request, urllib.parse, os, hashlib, time, pathlib
-
-        location = sys.argv[1]
-
-        UA = "TeaNode-Weather-Skill/1.0 (teanode-skills; github.com/teanode/teanode-skills)"
-
-        # --- Simple disk cache ---
-        CACHE_DIR = pathlib.Path(os.environ.get("TEANODE_CACHE_DIR", "/tmp/teanode-weather-cache"))
-        CACHE_DIR.mkdir(parents=True, exist_ok=True)
-        CACHE_TTL = 600  # 10 minutes
-
-        def cache_key(url):
-            return hashlib.sha256(url.encode()).hexdigest()
-
-        def cache_get(url):
-            p = CACHE_DIR / cache_key(url)
-            if p.exists() and (time.time() - p.stat().st_mtime) < CACHE_TTL:
-                return json.loads(p.read_text())
-            return None
-
-        def cache_set(url, data):
-            p = CACHE_DIR / cache_key(url)
-            p.write_text(json.dumps(data))
-
-        def fetch_json(url, ua=UA):
-            cached = cache_get(url)
-            if cached is not None:
-                return cached
-            req = urllib.request.Request(url, headers={"User-Agent": ua, "Accept": "application/geo+json"})
-            with urllib.request.urlopen(req, timeout=15) as resp:
-                data = json.loads(resp.read())
-            cache_set(url, data)
-            return data
-
-        # 1. Geocode via Nominatim
-        geo_url = "https://nominatim.openstreetmap.org/search?" + urllib.parse.urlencode({
-            "q": location, "format": "json", "limit": "1", "countrycodes": "us"
-        })
-        geo = fetch_json(geo_url)
-        if not geo:
-            print(json.dumps({"error": "Location not found. Provide a US city/state (e.g. 'Atlanta, GA')."}))
-            sys.exit(0)
-
-        lat = round(float(geo[0]["lat"]), 4)
-        lon = round(float(geo[0]["lon"]), 4)
-        display_name = geo[0].get("display_name", location)
-
-        # 2. NWS Points
-        points_url = f"https://api.weather.gov/points/{lat},{lon}"
-        points = fetch_json(points_url)
-        props = points.get("properties", {})
-        forecast_hourly_url = props.get("forecastHourly")
-        forecast_url = props.get("forecast")
-        if not forecast_hourly_url or not forecast_url:
-            print(json.dumps({"error": "NWS has no forecast data for this location. NWS covers US only."}))
-            sys.exit(0)
-
-        # 3. Fetch hourly forecast (current conditions proxy) and regular forecast (day summary)
-        hourly = fetch_json(forecast_hourly_url)
-        daily = fetch_json(forecast_url)
-
-        hourly_periods = hourly.get("properties", {}).get("periods", [])
-        daily_periods = daily.get("properties", {}).get("periods", [])
-
-        # Current conditions from first hourly period
-        current = {}
-        if hourly_periods:
-            h = hourly_periods[0]
-            current = {
-                "temperature": h.get("temperature"),
-                "temperatureUnit": h.get("temperatureUnit"),
-                "windSpeed": h.get("windSpeed"),
-                "windDirection": h.get("windDirection"),
-                "shortForecast": h.get("shortForecast"),
-                "humidity": h.get("relativeHumidity", {}).get("value"),
-                "precipitationChance": h.get("probabilityOfPrecipitation", {}).get("value"),
-            }
-
-        # Today high/low and precip from daily forecast
-        today_high = None
-        today_low = None
-        today_precip = None
-        today_detail = None
-        for p in daily_periods[:2]:
-            temp = p.get("temperature")
-            if p.get("isDaytime"):
-                today_high = temp
-                today_detail = p.get("detailedForecast")
-                pc = p.get("probabilityOfPrecipitation", {}).get("value")
-                if pc is not None:
-                    today_precip = pc
-            else:
-                today_low = temp
-
-        result = {
-            "location": display_name,
-            "coordinates": {"lat": lat, "lon": lon},
-            "current": current,
-            "today": {
-                "high": today_high,
-                "low": today_low,
-                "precipitationChance": today_precip,
-                "detail": today_detail,
-            },
-            "source": "National Weather Service (api.weather.gov)",
-        }
-        print(json.dumps(result, indent=2))
-      - "{{location}}"
+    type: workflow
     timeout: 30
     parameters:
       type: object
@@ -125,21 +13,138 @@ tools:
           type: string
           description: "Free-form location (e.g. 'Alpharetta, GA', 'Chicago, IL', 'Portland, OR')"
       required: ["location"]
+    steps:
+      - name: geocode
+        type: http
+        method: GET
+        url: "https://nominatim.openstreetmap.org/search?q={{location|urlencode}}&format=json&limit=1&countrycodes=us"
+        headers:
+          User-Agent: "TeaNode-Weather-Skill/1.0 (teanode-skills; github.com/teanode/teanode-skills)"
+          Accept: application/json
+        result: json
+        extract:
+          lat: "[0].lat"
+          lon: "[0].lon"
+          display_name: "[0].display_name"
+
+      - name: points
+        type: http
+        method: GET
+        url: "https://api.weather.gov/points/{{steps.geocode.lat}},{{steps.geocode.lon}}"
+        headers:
+          User-Agent: "TeaNode-Weather-Skill/1.0 (teanode-skills; github.com/teanode/teanode-skills)"
+          Accept: application/geo+json
+        result: json
+        extract:
+          forecast: "properties.forecast"
+          forecastHourly: "properties.forecastHourly"
+
+      - name: hourly
+        type: http
+        method: GET
+        url: "{{steps.points.forecastHourly}}"
+        headers:
+          User-Agent: "TeaNode-Weather-Skill/1.0 (teanode-skills; github.com/teanode/teanode-skills)"
+          Accept: application/geo+json
+        result: json
+        extract:
+          temperature: "properties.periods[0].temperature"
+          temperatureUnit: "properties.periods[0].temperatureUnit"
+          windSpeed: "properties.periods[0].windSpeed"
+          windDirection: "properties.periods[0].windDirection"
+          shortForecast: "properties.periods[0].shortForecast"
+          humidity: "properties.periods[0].relativeHumidity.value"
+          precipitationChance: "properties.periods[0].probabilityOfPrecipitation.value"
+
+      - name: daily
+        type: http
+        method: GET
+        url: "{{steps.points.forecast}}"
+        headers:
+          User-Agent: "TeaNode-Weather-Skill/1.0 (teanode-skills; github.com/teanode/teanode-skills)"
+          Accept: application/geo+json
+        result: json
+        extract:
+          highTemp: "properties.periods[0].temperature"
+          isDaytime: "properties.periods[0].isDaytime"
+          detail: "properties.periods[0].detailedForecast"
+          todayPrecip: "properties.periods[0].probabilityOfPrecipitation.value"
+          lowTemp: "properties.periods[1].temperature"
+
+    select:
+      location: "{{steps.geocode.display_name}}"
+      coordinates:
+        lat: "{{steps.geocode.lat}}"
+        lon: "{{steps.geocode.lon}}"
+      current:
+        temperature: "{{steps.hourly.temperature}}"
+        temperatureUnit: "{{steps.hourly.temperatureUnit}}"
+        windSpeed: "{{steps.hourly.windSpeed}}"
+        windDirection: "{{steps.hourly.windDirection}}"
+        shortForecast: "{{steps.hourly.shortForecast}}"
+        humidity: "{{steps.hourly.humidity}}"
+        precipitationChance: "{{steps.hourly.precipitationChance}}"
+      today:
+        high: "{{steps.daily.highTemp}}"
+        low: "{{steps.daily.lowTemp}}"
+        precipitationChance: "{{steps.daily.todayPrecip}}"
+        detail: "{{steps.daily.detail}}"
+      source: "National Weather Service (api.weather.gov)"
 ---
 
 Get weather forecasts for US locations using the **National Weather Service** API.
 
 Use `get_weather` with a free-form location string (city, state, or address).
 The tool geocodes the input via OpenStreetMap Nominatim, then fetches the NWS
-forecast.
+forecast through a four-step HTTP workflow:
+
+1. **Geocode** — resolve location to coordinates via Nominatim (US only).
+2. **NWS Points** — look up the NWS grid for those coordinates.
+3. **Hourly forecast** — current conditions proxy (first hourly period).
+4. **Daily forecast** — today's high/low and detailed outlook.
+
+### Output format
+
+```json
+{
+  "location": "Alpharetta, Fulton County, Georgia, US",
+  "coordinates": { "lat": "34.0754", "lon": "-84.2941" },
+  "current": {
+    "temperature": 72,
+    "temperatureUnit": "F",
+    "windSpeed": "5 mph",
+    "windDirection": "NW",
+    "shortForecast": "Partly Cloudy",
+    "humidity": 55,
+    "precipitationChance": 10
+  },
+  "today": {
+    "high": 78,
+    "low": 58,
+    "precipitationChance": 10,
+    "detail": "Partly cloudy, with a high near 78..."
+  },
+  "source": "National Weather Service (api.weather.gov)"
+}
+```
 
 ### Limitations
 
 - **US locations only.** The NWS API only covers the United States and
   territories. Non-US queries will return an error.
 - **Rate limits.** NWS asks consumers to be reasonable (no hard key required).
-  Nominatim requires a `User-Agent` header and asks for ≤ 1 req/sec. Results
-  are cached for 10 minutes to stay well within limits.
+  Nominatim requires a `User-Agent` header and asks for ≤ 1 req/sec.
 - **"Current" conditions are approximate.** NWS does not expose a real-time
   current-conditions endpoint; the first hourly forecast period is used as a
   proxy.
+- **Day/night periods.** The daily forecast extracts the first two periods.
+  When queried after sunset, `high` reflects tonight's temperature and `low`
+  reflects the next period. A future `round` or conditional filter could
+  improve this.
+
+### Framework notes
+
+This skill uses the `workflow` tool type with `steps`, `extract`, and `select`.
+The `extract` directive uses dot-path notation with bracket indices to pull
+nested fields from JSON responses. The `select` directive at the workflow level
+composes the final output from multiple step results.

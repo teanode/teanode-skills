@@ -44,6 +44,16 @@ Template features include:
 - secret loading (`{{secret:NAME}}`) with environment fallback
 - direct env lookup (`{{env:NAME}}`)
 
+## Included skills
+
+| Skill | Type | Description |
+|-------|------|-------------|
+| `weather` | workflow | US weather forecasts via NWS API. Chains four HTTP steps: Nominatim geocoding → NWS grid lookup → hourly forecast → daily forecast. Uses `extract` and `select` for output shaping. |
+| `dictionary` | http | English word definitions via dictionaryapi.dev. |
+| `git` | shell | Local git operations (status, diff, log). |
+| `news` | http | News headlines and search via NewsAPI. |
+| `unifi-protect` | workflow | UniFi Protect camera operations with action routing. |
+
 ## Index contract
 
 TeaNode registry client expects entries with:
