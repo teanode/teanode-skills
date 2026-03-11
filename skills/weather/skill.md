@@ -43,6 +43,7 @@ tools:
         type: http
         method: GET
         url: "{{steps.points.forecastHourly}}"
+        maxBytes: 300000
         headers:
           User-Agent: "TeaNode-Weather-Skill/1.0 (teanode-skills; github.com/teanode/teanode-skills)"
           Accept: application/geo+json
@@ -60,6 +61,7 @@ tools:
         type: http
         method: GET
         url: "{{steps.points.forecast}}"
+        maxBytes: 300000
         headers:
           User-Agent: "TeaNode-Weather-Skill/1.0 (teanode-skills; github.com/teanode/teanode-skills)"
           Accept: application/geo+json
