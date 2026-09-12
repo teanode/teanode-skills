@@ -1,11 +1,19 @@
 ---
 name: unifi-protect
-description: UniFi Protect camera operations with built-in routing and shared auth
+description: UniFi Protect camera operations against your own console, with built-in routing
 secrets:
   - key: UNIFI_PROTECT_TOKEN
-    description: Bearer token for UniFi Protect API
+    scope: person
+    description: Bearer token for your own UniFi Protect. Make one in UniFi OS under Settings, Admins, and give it only the camera permissions you want the agent to have.
   - key: UNIFI_PROTECT_HOST
-    description: UniFi OS host, for example nvr.local. It is a secret rather than a parameter of the tool so that the bearer token above is only ever sent to the address the operator set.
+    scope: person
+    description: Your UniFi OS host, for example nvr.local or 192.168.1.1. It is a secret rather than a parameter of the tool so that the token above is only ever sent to the address you set, never one named in a request.
+
+# Both of these are each person's own, because a UniFi Protect is somebody's
+# own equipment: their console, their token, their cameras. Scoping them
+# together is also what keeps the token safe -- a host one person names could
+# otherwise be handed a credential somebody else provided. A deployment where
+# everybody shares one console can have an operator settle it the other way.
 authenticationProfiles:
   protect:
     type: bearer
