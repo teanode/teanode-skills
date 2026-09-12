@@ -42,11 +42,11 @@
     },
     {
       "name": "unifi-protect",
-      "description": "UniFi Protect camera operations with built-in routing and shared auth",
-      "version": "1.1.0",
+      "description": "UniFi Protect camera operations with built-in routing and shared auth; the host is an operator secret",
+      "version": "1.2.0",
       "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/unifi-protect/skill.md",
-      "sha256": "63a09d9fc31361165903356cf954715dd1e1f7d4a34176cf210ab7026ef431af",
-      "signature": "QUjXGRokPYSD5nzZHq902GwLmuL4d7S2Rk1mKCxsocJXD33xExIU2vtyJLupgpd7OfF1VIMQNHlqR6TvgUQYCA==",
+      "sha256": "57421da26e454adb609f07456f0ddfd3fff86256f1373863605269a65ed520cc",
+      "signature": "Xn5x3sdlf4txBR4vJjnFRelYZPPyfXdRMdlqjhMpylo5kfI4zdBTW4Xjcb7zYkm2lmC/DXU7LoKayCFyBvBJAQ==",
       "tags": [
         "unifi",
         "camera",
