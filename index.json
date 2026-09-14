@@ -42,11 +42,11 @@
     },
     {
       "name": "unifi-protect",
-      "description": "UniFi Protect camera operations against your own console; the host and the token are each person's own",
-      "version": "2.0.0",
+      "description": "UniFi Protect cameras on your own console: snapshots, settings, and clips of what they recorded",
+      "version": "3.2.0",
       "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/unifi-protect/skill.md",
-      "sha256": "7a272c7f42bc4d31ff6baa3b877f9eec9010f8390d4cead2a3090521be46405c",
-      "signature": "/cOcffVpYuNOe6vLinJfSliTfj6V/yPyg40sAZ5nUl0CqYg+K9hTamv7Rhlfi3CgRK6leTi/BB2IaFrMrtzVAQ==",
+      "sha256": "4b4befa121bfbfb9d413ea73c6923977787013e17b45015c60ea2e36077c2712",
+      "signature": "p/rPLrAWnb/KS6iXI/2vcG+Ewvn2pvEQ5puEHMxbimw6O3YqkpQyMAqaTKJgpE9v1WaX7OTJ6QNEHCXJrXQ2Cg==",
       "tags": [
         "unifi",
         "camera",
