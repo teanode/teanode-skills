@@ -75,7 +75,11 @@ tools:
         - name: get_snapshot
           type: http
           method: GET
-          url: "https://{{secret:UNIFI_PROTECT_HOST}}/proxy/protect/integration/v1/cameras/{{cameraId}}/snapshot?highQuality=true"
+          # Not highQuality=true: a G4 Instant and a G5 Flex answer 400 to
+          # it, and only a doorbell, a turret and a G6 accept it. The plain
+          # snapshot is served by every camera, and is the smaller picture
+          # of the two, which is the one worth looking at anyway.
+          url: "https://{{secret:UNIFI_PROTECT_HOST}}/proxy/protect/integration/v1/cameras/{{cameraId}}/snapshot"
           auth: protect
           headers:
             Accept: image/jpeg

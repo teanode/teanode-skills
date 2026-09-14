@@ -43,10 +43,10 @@
     {
       "name": "unifi-protect",
       "description": "UniFi Protect cameras on your own console: snapshots, settings, and clips of what they recorded",
-      "version": "3.2.0",
+      "version": "3.2.1",
       "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/unifi-protect/skill.md",
-      "sha256": "4b4befa121bfbfb9d413ea73c6923977787013e17b45015c60ea2e36077c2712",
-      "signature": "p/rPLrAWnb/KS6iXI/2vcG+Ewvn2pvEQ5puEHMxbimw6O3YqkpQyMAqaTKJgpE9v1WaX7OTJ6QNEHCXJrXQ2Cg==",
+      "sha256": "3da2a23d60ac9323f59c61d5188cafa4ee7c8c665bf5495533a74d06f0aeaa16",
+      "signature": "DjsWvLzX8aTSlQMvfegb6tUEcJGDYO537duBqJqQRoBehV5wYUQdyelT/dcwyjVXOYwFrXDeXRGSkISX1l6oCg==",
       "tags": [
         "unifi",
         "camera",
