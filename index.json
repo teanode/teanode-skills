@@ -146,6 +146,20 @@
         "home",
         "http"
       ]
+    },
+    {
+      "name": "mattermost",
+      "description": "Mattermost through the mm command on the person's own computer: what is unread, a channel's messages, a thread, their direct messages, and posting as them",
+      "version": "1.0.0",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/mattermost/skill.md",
+      "sha256": "4c69dae4b84d6dbb221afb88f5b4db59ed3abd2edac0226d6cbe7f9819ba6701",
+      "signature": "lBh242rxZsAHwPzgHrx0QKNHJRm0GmjyYJsq19nprgdp+QJhXk2OJmnxAC+fuUQflV5HQwOPPKRcxNR2EEKxDg==",
+      "tags": [
+        "mattermost",
+        "chat",
+        "messages",
+        "shell"
+      ]
     }
   ]
 }
