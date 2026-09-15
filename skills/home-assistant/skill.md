@@ -76,7 +76,7 @@ tools:
       required: ["domain"]
 
   - name: home_find
-    description: Find the things in the house matching some words - "gym fan", "front door", "kitchen" - across every kind at once, with each one's state. Every word has to appear somewhere in the thing's name or id, in any order, so "gym fan" finds the Gym Ceiling Fan. Use it when you know what the person calls something but not its exact name or which kind it is. One thing often appears several times, as a fan, a light and half a dozen sensors of the same device: the one to act on is the one whose id starts with the domain you want.
+    description: Find the things in the house matching some words - "gym fan", "front door", "kitchen" - across every kind at once, with each one's state. Every word has to appear somewhere in the thing's name or id, in any order, so "gym fan" finds the Gym Ceiling Fan. Use it when you know what the person calls something but not its exact name or which kind it is. One thing often appears several times, as a fan, a light and half a dozen sensors of the same device - the one to act on is the one whose id starts with the domain you want.
     type: http
     method: POST
     url: "{{secret:HOME_ASSISTANT_URL}}/api/template"
