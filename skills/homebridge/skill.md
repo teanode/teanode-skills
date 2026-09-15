@@ -2,9 +2,9 @@
 name: homebridge
 description: "Homebridge through its own interface: the accessories it bridges, their state, and setting one"
 secrets:
-  - key: HOMEBRIDGE_HOST
+  - key: HOMEBRIDGE_URL
     scope: person
-    description: Where the Homebridge interface is, with its port and scheme - http://homebridge.local:8581, or an address on your own network. It is a secret rather than a parameter of the tools so that the name and password below are only ever sent to the address you set.
+    description: Where the Homebridge interface is, whole - http://homebridge.local:8581, or an address on your own network. The scheme and the port are part of it, because a bridge is as often plain HTTP on 8581 as anything else. It is a secret rather than a parameter of the tools so that the name and password below are only ever sent to the address you set.
   - key: HOMEBRIDGE_USERNAME
     scope: person
     description: The name you sign in to the Homebridge interface with. Consider making a second account for this, with only the access you want the agent to have, rather than the one you use yourself.
@@ -31,7 +31,7 @@ tools:
       - name: sign_in
         type: http
         method: POST
-        url: "{{secret:HOMEBRIDGE_HOST}}/api/auth/login"
+        url: "{{secret:HOMEBRIDGE_URL}}/api/auth/login"
         headers:
           Accept: application/json
           Content-Type: application/json
@@ -44,7 +44,7 @@ tools:
       - name: accessories
         type: http
         method: GET
-        url: "{{secret:HOMEBRIDGE_HOST}}/api/accessories"
+        url: "{{secret:HOMEBRIDGE_URL}}/api/accessories"
         headers:
           Accept: application/json
           Authorization: "Bearer {{steps.sign_in.token}}"
@@ -65,7 +65,7 @@ tools:
       - name: sign_in
         type: http
         method: POST
-        url: "{{secret:HOMEBRIDGE_HOST}}/api/auth/login"
+        url: "{{secret:HOMEBRIDGE_URL}}/api/auth/login"
         headers:
           Accept: application/json
           Content-Type: application/json
@@ -78,7 +78,7 @@ tools:
       - name: accessory
         type: http
         method: GET
-        url: "{{secret:HOMEBRIDGE_HOST}}/api/accessories/{{uniqueId}}"
+        url: "{{secret:HOMEBRIDGE_URL}}/api/accessories/{{uniqueId}}"
         headers:
           Accept: application/json
           Authorization: "Bearer {{steps.sign_in.token}}"
@@ -104,7 +104,7 @@ tools:
       - name: sign_in
         type: http
         method: POST
-        url: "{{secret:HOMEBRIDGE_HOST}}/api/auth/login"
+        url: "{{secret:HOMEBRIDGE_URL}}/api/auth/login"
         headers:
           Accept: application/json
           Content-Type: application/json
@@ -117,7 +117,7 @@ tools:
       - name: set
         type: http
         method: PUT
-        url: "{{secret:HOMEBRIDGE_HOST}}/api/accessories/{{uniqueId}}"
+        url: "{{secret:HOMEBRIDGE_URL}}/api/accessories/{{uniqueId}}"
         headers:
           Accept: application/json
           Content-Type: application/json
@@ -137,7 +137,7 @@ tools:
       - name: sign_in
         type: http
         method: POST
-        url: "{{secret:HOMEBRIDGE_HOST}}/api/auth/login"
+        url: "{{secret:HOMEBRIDGE_URL}}/api/auth/login"
         headers:
           Accept: application/json
           Content-Type: application/json
@@ -150,7 +150,7 @@ tools:
       - name: homebridge
         type: http
         method: GET
-        url: "{{secret:HOMEBRIDGE_HOST}}/api/status/homebridge"
+        url: "{{secret:HOMEBRIDGE_URL}}/api/status/homebridge"
         headers:
           Accept: application/json
           Authorization: "Bearer {{steps.sign_in.token}}"
@@ -158,7 +158,7 @@ tools:
       - name: uptime
         type: http
         method: GET
-        url: "{{secret:HOMEBRIDGE_HOST}}/api/status/uptime"
+        url: "{{secret:HOMEBRIDGE_URL}}/api/status/uptime"
         headers:
           Accept: application/json
           Authorization: "Bearer {{steps.sign_in.token}}"
