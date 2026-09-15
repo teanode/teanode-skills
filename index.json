@@ -69,10 +69,10 @@
     {
       "name": "home-assistant",
       "description": "Your own Home Assistant: ask it something, read a device, call a service, look at a camera",
-      "version": "1.2.0",
+      "version": "1.3.0",
       "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/home-assistant/skill.md",
-      "sha256": "6a3a43839dc91be771a5e9f2f0005477eb2c1e4daec04efc5696ee8ca2d89e93",
-      "signature": "ZNlBjQziK5eHxWvOEZJOZp2lOGIOzQd5RZXUgbZR5bCXIG8ZyLyCU90+bAmS+G1hEVHCTNlVd/buxkXhCI2ACg==",
+      "sha256": "c6534a7182593eaf1f750470fb54b738789e95306d27823703bf778f7cf5cbc1",
+      "signature": "ILHU9ugQIz0lCbGM0nX21kM9PKCDJYquiXLh8uQdhcM6ziARBfEpN+7abkZtsb7SwO2llg1Qsk0BRkqEu8vIDQ==",
       "tags": [
         "home",
         "automation",
