@@ -132,6 +132,20 @@
         "wiki",
         "shell"
       ]
+    },
+    {
+      "name": "homebridge",
+      "description": "Homebridge through its own interface: the accessories it bridges, their state, and setting one",
+      "version": "1.0.0",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/homebridge/skill.md",
+      "sha256": "9a4dd864a51817733f71520fbf4841b5a200f5c425909db371b42a3ec036297d",
+      "signature": "xUSmRgJYazWOTWauJ7s/Gr+t+Cl6A6dBR5a4cc1wq2kPjcJP7OgBk1+sGqiPoJzMAQZNlrg+9xprpgJa6rCwBw==",
+      "tags": [
+        "homebridge",
+        "homekit",
+        "home",
+        "http"
+      ]
     }
   ]
 }
