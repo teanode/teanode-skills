@@ -43,10 +43,10 @@
     {
       "name": "unifi-protect",
       "description": "UniFi Protect cameras on your own console: snapshots, settings, and clips of what they recorded",
-      "version": "3.2.1",
+      "version": "4.0.0",
       "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/unifi-protect/skill.md",
-      "sha256": "3da2a23d60ac9323f59c61d5188cafa4ee7c8c665bf5495533a74d06f0aeaa16",
-      "signature": "DjsWvLzX8aTSlQMvfegb6tUEcJGDYO537duBqJqQRoBehV5wYUQdyelT/dcwyjVXOYwFrXDeXRGSkISX1l6oCg==",
+      "sha256": "ae118bfb3cba7f43b2539590b5f40eaac042e1a05bdabac9bc3e9a4df960e266",
+      "signature": "nv+30xEDPHZWbfKKOGxJqBfCCs0i6eDHRXMA1qoYlUz4QsXMv98Dlys1jZ6LaMekXaTv7mNLVKK+c3mXtd9/BA==",
       "tags": [
         "unifi",
         "camera",
@@ -136,10 +136,10 @@
     {
       "name": "homebridge",
       "description": "Homebridge through its own interface: the accessories it bridges, their state, and setting one",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/homebridge/skill.md",
-      "sha256": "9a4dd864a51817733f71520fbf4841b5a200f5c425909db371b42a3ec036297d",
-      "signature": "xUSmRgJYazWOTWauJ7s/Gr+t+Cl6A6dBR5a4cc1wq2kPjcJP7OgBk1+sGqiPoJzMAQZNlrg+9xprpgJa6rCwBw==",
+      "sha256": "255693042a32a2c7f9bbe5315c714a91416d036d7a9adc8f77eccc5e95cda643",
+      "signature": "uQYmU+sW94bnLwf5Rv973TRq1lHEN9GKV9zxeh5nPgtJ0FQ50nJZ6TewmpLRdTf8oW2li8NLB4OsSGbRVWonBA==",
       "tags": [
         "homebridge",
         "homekit",

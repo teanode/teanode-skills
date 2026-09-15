@@ -5,9 +5,9 @@ secrets:
   - key: UNIFI_PROTECT_API_KEY
     scope: person
     description: An API key for your own UniFi Protect. Make one in UniFi OS under Settings, Control Plane, Integrations, and give it only the camera permissions you want the agent to have. This is not a UniFi account password, and not a bearer token taken from a browser session.
-  - key: UNIFI_PROTECT_HOST
+  - key: UNIFI_PROTECT_URL
     scope: person
-    description: Your UniFi OS host, for example nvr.local or 192.168.1.1. It is a secret rather than a parameter of the tool so that the key above is only ever sent to the address you set, never one named in a request.
+    description: Where your UniFi OS is, whole - https://nvr.local or https://192.168.1.1, with a port if it is on one. The scheme is part of it rather than assumed, and it is a secret rather than a parameter of the tool so that the key above is only ever sent to the address you set, never one named in a request.
   - key: UNIFI_PROTECT_USERNAME
     scope: person
     description: The name you sign in to UniFi OS with. Only downloading a clip needs it, because that is the console's own interface rather than the integration API, and it answers to a session rather than to a key. Leave this unset and everything except protect_clip still works.
@@ -66,7 +66,7 @@ tools:
         - name: list_cameras
           type: http
           method: GET
-          url: "https://{{secret:UNIFI_PROTECT_HOST}}/proxy/protect/integration/v1/cameras"
+          url: "{{secret:UNIFI_PROTECT_URL}}/proxy/protect/integration/v1/cameras"
           auth: protect
           headers:
             Accept: application/json
@@ -79,7 +79,7 @@ tools:
           # it, and only a doorbell, a turret and a G6 accept it. The plain
           # snapshot is served by every camera, and is the smaller picture
           # of the two, which is the one worth looking at anyway.
-          url: "https://{{secret:UNIFI_PROTECT_HOST}}/proxy/protect/integration/v1/cameras/{{cameraId}}/snapshot"
+          url: "{{secret:UNIFI_PROTECT_URL}}/proxy/protect/integration/v1/cameras/{{cameraId}}/snapshot"
           auth: protect
           headers:
             Accept: image/jpeg
@@ -88,7 +88,7 @@ tools:
         - name: get_camera
           type: http
           method: GET
-          url: "https://{{secret:UNIFI_PROTECT_HOST}}/proxy/protect/integration/v1/cameras/{{cameraId}}"
+          url: "{{secret:UNIFI_PROTECT_URL}}/proxy/protect/integration/v1/cameras/{{cameraId}}"
           auth: protect
           headers:
             Accept: application/json
@@ -97,7 +97,7 @@ tools:
         - name: set_status_light
           type: http
           method: PATCH
-          url: "https://{{secret:UNIFI_PROTECT_HOST}}/proxy/protect/integration/v1/cameras/{{cameraId}}"
+          url: "{{secret:UNIFI_PROTECT_URL}}/proxy/protect/integration/v1/cameras/{{cameraId}}"
           auth: protect
           headers:
             Accept: application/json
@@ -108,7 +108,7 @@ tools:
         - name: set_microphone_volume
           type: http
           method: PATCH
-          url: "https://{{secret:UNIFI_PROTECT_HOST}}/proxy/protect/integration/v1/cameras/{{cameraId}}"
+          url: "{{secret:UNIFI_PROTECT_URL}}/proxy/protect/integration/v1/cameras/{{cameraId}}"
           auth: protect
           headers:
             Accept: application/json
@@ -119,7 +119,7 @@ tools:
         - name: get_console
           type: http
           method: GET
-          url: "https://{{secret:UNIFI_PROTECT_HOST}}/proxy/protect/integration/v1/nvrs"
+          url: "{{secret:UNIFI_PROTECT_URL}}/proxy/protect/integration/v1/nvrs"
           auth: protect
           headers:
             Accept: application/json
@@ -148,7 +148,7 @@ tools:
       - name: sign_in
         type: http
         method: POST
-        url: "https://{{secret:UNIFI_PROTECT_HOST}}/api/auth/login"
+        url: "{{secret:UNIFI_PROTECT_URL}}/api/auth/login"
         headers:
           Accept: application/json
           Content-Type: application/json
@@ -159,7 +159,7 @@ tools:
       - name: clip
         type: http
         method: GET
-        url: "https://{{secret:UNIFI_PROTECT_HOST}}/proxy/protect/api/video/export?camera={{cameraId}}&start={{start}}&end={{end}}"
+        url: "{{secret:UNIFI_PROTECT_URL}}/proxy/protect/api/video/export?camera={{cameraId}}&start={{start}}&end={{end}}"
         headers:
           Accept: video/mp4
         result: file
@@ -167,7 +167,7 @@ tools:
 ---
 
 Use protect_ops as a single entrypoint for UniFi Protect operations.
-Set `UNIFI_PROTECT_API_KEY` and `UNIFI_PROTECT_HOST` in TeaNode's skill
+Set `UNIFI_PROTECT_API_KEY` and `UNIFI_PROTECT_URL` in TeaNode's skill
 secrets. The host is a secret rather than a parameter of the tool on
 purpose: the key is sent to it, so it must be the address the person set
 and not one chosen when the tool is called.
