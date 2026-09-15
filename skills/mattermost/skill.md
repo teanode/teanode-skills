@@ -36,12 +36,16 @@ tools:
         channel:
           type: string
           description: For info - the channel, by its slug as the listings give it
+        team:
+          type: string
+          default: ""
+          description: Which team's channels to look in. Leave it out for the team they are in; name another to reach its channels - mattermost_whoami lists the ones they are on. A channel belongs to a team, and the same name can exist in two of them.
       required: ["action"]
     actions:
       unread:
         - name: unread
           type: shell
-          command: [mm, channel, unread, --json]
+          command: [mm, channel, unread, -T, "{{team}}", --json]
           timeout: 60
       mine:
         - name: mine
@@ -54,13 +58,14 @@ tools:
           command:
             - sh
             - -c
-            - 'mm channel list --json | jq -c "$0"'
+            - 'mm channel list -T "$1" --json | jq -c "$0"'
             - '[.[] | select(.type == "O" or .type == "P") | {name, display_name, type, last_post_at}] | sort_by(-.last_post_at)'
+            - "{{team}}"
           timeout: 60
       info:
         - name: info
           type: shell
-          command: [mm, channel, info, "{{channel}}", --json]
+          command: [mm, channel, info, "{{channel}}", -T, "{{team}}", --json]
           timeout: 60
 
   - name: mattermost_posts
@@ -87,12 +92,16 @@ tools:
           type: string
           default: "20"
           description: For list - how many messages, most recent last
+        team:
+          type: string
+          default: ""
+          description: Which team's channels to look in. Leave it out for the team they are in; name another to reach its channels - mattermost_whoami lists the ones they are on. A channel belongs to a team, and the same name can exist in two of them.
       required: ["action"]
     actions:
       unread:
         - name: unread
           type: shell
-          command: [mm, post, unread, "{{channel}}", --json]
+          command: [mm, post, unread, "{{channel}}", -T, "{{team}}", --json]
           timeout: 60
       list:
         - name: list
@@ -101,12 +110,12 @@ tools:
           # JSON gives their ids and five times the bytes. --full-id because
           # the id it prints otherwise is an abbreviation, and thread and
           # reply refuse one.
-          command: [mm, post, list, "{{channel}}", -n, "{{count}}", --full-id]
+          command: [mm, post, list, "{{channel}}", -n, "{{count}}", -T, "{{team}}", --full-id]
           timeout: 60
       thread:
         - name: thread
           type: shell
-          command: [mm, post, thread, "{{post}}", --json]
+          command: [mm, post, thread, "{{post}}", -T, "{{team}}", --json]
           timeout: 60
       search:
         - name: search
@@ -119,8 +128,9 @@ tools:
           command:
             - sh
             - -c
-            - 'mm post search "$0" | head -n 80'
+            - 'mm post search "$0" -T "$1" | head -n 80'
             - "{{query}}"
+            - "{{team}}"
           timeout: 90
 
   - name: mattermost_direct
@@ -182,17 +192,21 @@ tools:
         message:
           type: string
           description: What to say, exactly as it should appear
+        team:
+          type: string
+          default: ""
+          description: Which team's channels to look in. Leave it out for the team they are in; name another to reach its channels - mattermost_whoami lists the ones they are on. A channel belongs to a team, and the same name can exist in two of them.
       required: ["action", "message"]
     actions:
       post:
         - name: post
           type: shell
-          command: [mm, post, create, "{{channel}}", "{{message}}", --json]
+          command: [mm, post, create, "{{channel}}", "{{message}}", -T, "{{team}}", --json]
           timeout: 60
       reply:
         - name: reply
           type: shell
-          command: [mm, post, reply, "{{post}}", "{{message}}", --json]
+          command: [mm, post, reply, "{{post}}", "{{message}}", -T, "{{team}}", --json]
           timeout: 60
       direct:
         - name: direct
