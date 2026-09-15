@@ -79,6 +79,59 @@
         "camera",
         "http"
       ]
+    },
+    {
+      "name": "github",
+      "description": "GitHub through the gh command on the person's own computer: repositories, issues, pull requests, runs, searches",
+      "version": "2.0.0",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/github/skill.md",
+      "sha256": "0d0b89ac037bbe9566b203c088929572eb3b2137cc3091af9b1b06edacd5ef94",
+      "signature": "fml5UgSBA6oCvbbO23rr4leeUsgu/NNmYB4BlzeqLoUGl2R3qcjuQEgEkPgeyVgzKFmN+RG7EvDTcEWRWVbuCw==",
+      "tags": [
+        "github",
+        "code",
+        "issues",
+        "shell"
+      ]
+    },
+    {
+      "name": "gitea",
+      "description": "Gitea through the tea command on the person's own computer: repositories, issues, pull requests, releases",
+      "version": "1.0.0",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/gitea/skill.md",
+      "sha256": "83e591772827f905f1b679838f1732b0b08c91b550e6ba8cc884e584112cc752",
+      "signature": "mBD3ei0Xz0qJaUatg17uux+30+HEfkRiYYw9Me1mLdtVFr+3VzSXVjvnIbeu/1K9v5vNH7oS9C99u0e6tsmtAw==",
+      "tags": [
+        "gitea",
+        "code",
+        "shell"
+      ]
+    },
+    {
+      "name": "gitlab",
+      "description": "GitLab through the glab command on the person's own computer: issues, merge requests, pipelines, releases",
+      "version": "1.0.0",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/gitlab/skill.md",
+      "sha256": "fdde90e02d030a5a98692ffa8fe51c11b464fbba118547149b32e8cd30081098",
+      "signature": "LEJfgDfnAX+e4U7D3RGRCUXSRfCJ4RDqL2zwU5Nc6qiTfSF+LVyCmAk7frQ5uo6fkYXsyn4qsNki7jzzh+M5Bg==",
+      "tags": [
+        "gitlab",
+        "code",
+        "shell"
+      ]
+    },
+    {
+      "name": "confluence",
+      "description": "Confluence through the confluence command on the person's own computer: search, read, spaces",
+      "version": "1.0.0",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/confluence/skill.md",
+      "sha256": "dd4151a13264c111230276ff1af97a885bd5fd7394492b3fd25263f1cb5e42d5",
+      "signature": "DKOQkOs7cwEOf31oErKNyB2H0zvQcrXWXuPGdxPOoLkfUKdOtjKHapESyCbtO8rMQ6DpdVg+eNeZptkVRgZBCg==",
+      "tags": [
+        "confluence",
+        "wiki",
+        "shell"
+      ]
     }
   ]
 }
