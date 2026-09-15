@@ -161,10 +161,19 @@ entity id, name, state -- which is what the other tools want.
 
 home_ask hands a whole sentence to Home Assistant's own assistant, which
 knows the house's names and rooms. It is the shortest way to do something
-ordinary. Be warned that a Home Assistant answers only the sentences it has
-patterns for unless its owner has given it a model of its own: if it says it
-did not understand, do not rephrase it twice -- find the entity with
-home_find and use home_state or home_service instead.
+ordinary, and it fails often: a Home Assistant answers only the sentences it
+has patterns for, unless its owner has given it a model of its own.
+
+When it does not understand, finish the job yourself rather than handing the
+problem back. The person asked for something; home_ask not understanding it
+is this skill's difficulty, not a change of mind. Find the entity with
+home_find and carry it out with home_service, and say what you did. Asking
+"shall I turn it on now?" after they have just asked you to turn it on is
+the one answer that is certainly wrong.
+
+Ask them again only when the thing itself is in doubt -- two fans could be
+the one they meant, or what turns up is a lock rather than a light. Then
+name what you found and let them choose.
 
 home_state gives one thing's exact state when a sentence would round it
 off; home_service makes one exact call when you know the domain, the
@@ -173,8 +182,12 @@ is how to answer whether the car is on the drive rather than what a door
 sensor last reported.
 
 Entity ids are domain first: `light.kitchen`, `binary_sensor.front_door`,
-`camera.back_door`. If you do not know one, ask for it in words with
-home_ask rather than guessing an id.
+`camera.back_door`, `fan.gym_ceiling_fan`. Never guess one: home_find takes
+the words a person would use and answers with the ids that match.
+
+Turning something on or off is `home_service` with the domain the entity id
+starts with, the service `turn_on`, `turn_off` or `toggle`, and that entity.
+A fan is `fan.turn_on`, a light `light.turn_on`, a switch `switch.turn_on`.
 
 Anything that changes the house asks the person first. That is deliberate:
 a house is not a place to be tidied up in by surprise.
