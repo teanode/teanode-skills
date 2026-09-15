@@ -76,7 +76,7 @@ tools:
       required: ["domain"]
 
   - name: home_find
-    description: Find the things in the house whose entity id or name contains some words - "door", "kitchen", "garage" - across every kind at once, with each one's state. Use it when you know what the person calls something but not which kind it is.
+    description: Find the things in the house matching some words - "gym fan", "front door", "kitchen" - across every kind at once, with each one's state. Every word has to appear somewhere in the thing's name or id, in any order, so "gym fan" finds the Gym Ceiling Fan. Use it when you know what the person calls something but not its exact name or which kind it is. One thing often appears several times, as a fan, a light and half a dozen sensors of the same device - the one to act on is the one whose id starts with the domain you want.
     type: http
     method: POST
     url: "{{secret:HOME_ASSISTANT_URL}}/api/template"
@@ -84,7 +84,13 @@ tools:
     headers:
       Accept: text/plain
     body:
-      template: "{% set wanted = {{words|json}} | lower %}{% for s in states %}{% if wanted in s.entity_id | lower or wanted in s.name | lower %}{{{{ s.entity_id }}}}|{{{{ s.name }}}}|{{{{ s.state }}}}\n{% endif %}{% endfor %}"
+      # Every word, anywhere, rather than the whole phrase in one piece.
+      # A house calls something "Gym Ceiling Fan Ceiling Fan" and its id is
+      # fan.gym_ceiling_fan, so a person asking for the "gym fan" matched
+      # neither: the words are there and not next to each other. The id's
+      # underscores and dots are spaces for this, so a word matches whether
+      # it came from the name or the id.
+      template: "{% set words = ({{words|json}} | lower | trim).split() %}{% for s in states %}{% set hay = (s.entity_id ~ ' ' ~ s.name) | lower | replace('_', ' ') | replace('.', ' ') %}{% if words | reject('in', hay) | list | count == 0 %}{{{{ s.entity_id }}}}|{{{{ s.name }}}}|{{{{ s.state }}}}\n{% endif %}{% endfor %}"
     result: text
     maxBytes: 65536
     parameters:
