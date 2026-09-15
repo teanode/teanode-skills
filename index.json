@@ -42,11 +42,11 @@
     },
     {
       "name": "unifi-protect",
-      "description": "UniFi Protect camera operations against your own console; the host and the token are each person's own",
-      "version": "2.0.0",
+      "description": "UniFi Protect cameras on your own console: snapshots, settings, and clips of what they recorded",
+      "version": "3.2.1",
       "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/unifi-protect/skill.md",
-      "sha256": "7a272c7f42bc4d31ff6baa3b877f9eec9010f8390d4cead2a3090521be46405c",
-      "signature": "/cOcffVpYuNOe6vLinJfSliTfj6V/yPyg40sAZ5nUl0CqYg+K9hTamv7Rhlfi3CgRK6leTi/BB2IaFrMrtzVAQ==",
+      "sha256": "3da2a23d60ac9323f59c61d5188cafa4ee7c8c665bf5495533a74d06f0aeaa16",
+      "signature": "DjsWvLzX8aTSlQMvfegb6tUEcJGDYO537duBqJqQRoBehV5wYUQdyelT/dcwyjVXOYwFrXDeXRGSkISX1l6oCg==",
       "tags": [
         "unifi",
         "camera",
@@ -64,6 +64,20 @@
         "news",
         "http",
         "api"
+      ]
+    },
+    {
+      "name": "home-assistant",
+      "description": "Your own Home Assistant: ask it something, read a device, call a service, look at a camera",
+      "version": "1.1.0",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/home-assistant/skill.md",
+      "sha256": "ae6842d68e6799284c52d9c467ba97fc8bbc0ed29d5c2a507e15164cfe999139",
+      "signature": "glB1sA1fmnLuhbK02dEgtW7ZUHSzA7KiJnRoey4Y2q6sAAhbePRv8/GyACBZ74ldLQIroT/tsDXN7JCW+NyHBQ==",
+      "tags": [
+        "home",
+        "automation",
+        "camera",
+        "http"
       ]
     }
   ]
