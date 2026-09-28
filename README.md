@@ -53,6 +53,8 @@ Template features include:
 | `git` | shell | Local git operations (status, diff, log). |
 | `news` | http | News headlines and search via NewsAPI. |
 | `unifi-protect` | workflow | UniFi Protect camera operations with action routing. |
+| `gmail` | workflow | Gmail through the `gog` command on the person's computer: search, read, draft, send and label. |
+| `google-drive` | workflow | Google Drive through the `gog` command on the person's computer: search, list, read, download, upload and share. |
 
 ## Index contract
 

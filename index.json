@@ -160,6 +160,35 @@
         "messages",
         "shell"
       ]
+    },
+    {
+      "name": "gmail",
+      "description": "Gmail through the gog command on the person's own computer: searching and reading their mail, drafting and sending as them, and labeling, archiving and marking threads",
+      "version": "1.0.0",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/gmail/skill.md",
+      "sha256": "1c6cf1cc1187d123ac47352ef9679412f575e4ff53636a53bb42878824bbdf08",
+      "signature": "/hZCz5HXYC1oBu7r8metxKMQbwCgE3F/IdBdyQyEGdeLuf6aJoDbBS6k9YKuw8eCAgi+6Y7JLTjFZlH6/CBLBA==",
+      "tags": [
+        "gmail",
+        "google",
+        "mail",
+        "shell"
+      ]
+    },
+    {
+      "name": "google-drive",
+      "description": "Google Drive through the gog command on the person's own computer: searching and listing their files, reading a Google Doc as text, downloading and uploading files, and sharing",
+      "version": "1.0.0",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/google-drive/skill.md",
+      "sha256": "1c69c5c89aa2e79728acc054e52100443eaaf355b633f16be5e49811237c3107",
+      "signature": "X9wCzWGiu+D3pE0rGu+TyhhmkXK2BqVo0zaxfUHEvOyKMypyYFOVaTEGbqQhTmKSau5xSbr7cYSWnHice9taAQ==",
+      "tags": [
+        "google-drive",
+        "google",
+        "drive",
+        "files",
+        "shell"
+      ]
     }
   ]
 }
