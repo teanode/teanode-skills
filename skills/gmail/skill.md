@@ -45,11 +45,11 @@ tools:
       properties:
         action:
           type: string
-          enum: ["thread", "message"]
-          description: thread reads a whole conversation; message reads one message
+          enum: ["thread", "message", "thread_latest"]
+          description: thread reads a whole conversation; message reads one message; thread_latest reads the end of a conversation as text, its newest message last
         id:
           type: string
-          description: The thread id for thread, the message id for message
+          description: The thread id for thread and thread_latest, the message id for message
       required: ["action", "id"]
     actions:
       thread:
@@ -61,6 +61,18 @@ tools:
         - name: message
           type: shell
           command: [gog, gmail, get, "{{id}}", --json, --no-input]
+          timeout: 60
+      thread_latest:
+        # The thread as text, decoded, and only its end: what is new in a
+        # long conversation is its last message, and the beginning of a
+        # thread of fifty replies is what would be cut otherwise.
+        - name: thread_latest
+          type: shell
+          command:
+            - sh
+            - -c
+            - 'gog gmail thread get "$0" --full --no-input | tail -c 20000'
+            - "{{id}}"
           timeout: 60
 
   - name: gmail_draft
@@ -169,6 +181,34 @@ tools:
           type: shell
           command: [gog, gmail, thread, modify, "{{thread_id}}", --remove, "{{labels}}", --no-input]
           timeout: 60
+
+  - name: gmail_new
+    description: Threads in the person's Gmail with mail that arrived since a moment, archived or not, leaving out what they sent, drafts, spam, trash and the promotions and social tabs. Up to 25, each with its id, how many messages it has, when the newest came, from whom, its subject and its labels. For keeping watch; to look something up, gmail_search takes any query.
+    type: shell
+    parameters:
+      type: object
+      properties:
+        since_epoch:
+          type: string
+          description: The moment to look from, in seconds since 1970
+      required: ["since_epoch"]
+    # Shaped into the items a watch reads: the thread's message count is
+    # its version, so a reply to an old thread is new again. Dates in UTC,
+    # since without the flag gog prints local time with no zone.
+    command:
+      - sh
+      - -c
+      - 'gog gmail search "after:$0 -in:sent -in:drafts -in:chats -in:spam -in:trash -category:promotions -category:social" --max 25 --json --no-input --timezone UTC | jq -c "$1"'
+      - "{{since_epoch}}"
+      - '[.threads[]? | {id, version: (.messageCount | tostring), at: ((.date | sub(" "; "T")) + ":00Z"), from, title: .subject, text: ("Gmail labels: " + ((.labels // []) | join(", "))), url: ("https://mail.google.com/mail/#all/" + .id)}]'
+    timeout: 60
+
+watches:
+  - name: new_mail
+    description: mail that arrives in their Gmail, archived or not
+    kind: mail
+    list: {tool: gmail_new}
+    read: {tool: gmail_read, arguments: {action: thread_latest}}
 ---
 
 # Gmail

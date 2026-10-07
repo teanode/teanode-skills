@@ -229,4 +229,33 @@ tools:
         type: shell
         command: [mm, team, list, --json]
         timeout: 60
+
+  - name: mattermost_new_mentions
+    description: Messages that mention the person by name, posted since a moment by somebody else, with who wrote them and what they said. For keeping watch; mattermost_posts searches anything.
+    type: shell
+    parameters:
+      type: object
+      properties:
+        since_epoch:
+          type: string
+          description: The moment to look from, in seconds since 1970
+      required: ["since_epoch"]
+    # Searches the active team for their @name, keeps what is newer than the
+    # moment and not their own, and shapes it into the items a watch reads,
+    # each with its author's username from the answer's own users.
+    command:
+      - sh
+      - -c
+      - 'me=$(mm user me --json) && mm post search "@$(printf "%s" "$me" | jq -r .username)" --json | jq -c --argjson since "$0" --arg me "$(printf "%s" "$me" | jq -r .id)" "$1"'
+      - "{{since_epoch}}"
+      - '[.posts as $posts | (.users // {}) as $users | (.order // [])[] | $posts[.] | select(. != null and .create_at >= ($since * 1000) and .user_id != $me) | {id, at: ((.create_at / 1000 | floor) | todate), from: ($users[.user_id].username // .user_id), title: ("a mention by " + ($users[.user_id].username // "someone")), text: .message}]'
+    timeout: 90
+
+watches:
+  - name: new_mentions
+    description: messages in Mattermost that mention them
+    kind: item
+    guidance: |
+      Worth telling now: somebody waiting on them for something urgent - a production problem, a customer or a site down, a meeting that has started without them, a decision blocking others today. Worth telling today: a direct question or a request addressed to them, a review or an approval asked of them, a change in plans that concerns them. Not worth telling: a mention in passing, thanks, a link shared to a group, a reply to a thread they are following that asks nothing of them, an announcement to many.
+    list: {tool: mattermost_new_mentions}
 ---
