@@ -55,6 +55,7 @@ Template features include:
 | `unifi-protect` | workflow | UniFi Protect camera operations with action routing. |
 | `gmail` | workflow | Gmail through the `gog` command on the person's computer: search, read, draft, send and label. |
 | `google-drive` | workflow | Google Drive through the `gog` command on the person's computer: search, list, read, download, upload and share. |
+| `link` | workflow | Link by Stripe through the `link-cli` command on the person's computer: transactions, balances, connected accounts and insights, and payments approved in the Link app. |
 
 ## Index contract
 

@@ -189,6 +189,21 @@
         "files",
         "shell"
       ]
+    },
+    {
+      "name": "link",
+      "description": "Link by Stripe through the link-cli command on the person's own computer: their transactions, balances and connected accounts, and payments they approve in the Link app",
+      "version": "1.0.0",
+      "url": "https://raw.githubusercontent.com/teanode/teanode-skills/main/skills/link/skill.md",
+      "sha256": "49004298bc044ebcdcc83521895677535f03326b00eaea02de521426ac4b84e3",
+      "signature": "CV3IKatuNHIwrv85h2/VOF16wE2gTxexFeMmzgsXGb2Ld7DctV0J+k1UV1dgPNuLNIodQP/7CNFXsKkGTL4vAw==",
+      "tags": [
+        "link",
+        "stripe",
+        "finance",
+        "payments",
+        "shell"
+      ]
     }
   ]
 }
