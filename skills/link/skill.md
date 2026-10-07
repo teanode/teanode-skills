@@ -200,6 +200,39 @@ tools:
           type: shell
           command: [link-cli, report, --domain, "{{domain}}", --outcome, "{{outcome}}", --spend-request-id, "{{spend_request_id}}", --format, json]
           timeout: 60
+
+  - name: link_new_transactions
+    description: The person's transactions in Link and their connected accounts dated from a day to today, each with its id, its day, whom it was with, the amount and whether money went out or came in. For keeping watch; link_transactions is for looking things up.
+    type: shell
+    parameters:
+      type: object
+      properties:
+        since_date:
+          type: string
+          description: The first day, as YYYY-MM-DD
+      required: ["since_date"]
+    # Shaped into the items a watch reads, amounts in the currency rather
+    # than in cents. A transaction keeps its id from pending to posted, and
+    # is not watched again when it posts.
+    command:
+      - sh
+      - -c
+      - 'link-cli transactions list --start-date "$0" --end-date "$(date +%F)" --limit 100 --format json | jq -c "$1"'
+      - "{{since_date}}"
+      - '[.data[]? | {id, at: .created_date, from: .description, title: ("\(if .amount < 0 then "-" else "" end)\((if .amount < 0 then -.amount else .amount end) / 100) \(.currency | ascii_upcase)"), text: ("\(if .amount < 0 then "Money out" else "Money in" end): \(.description), \((if .amount < 0 then -.amount else .amount end) / 100) \(.currency | ascii_upcase), on \(.created_date), category \(.category), \(.status)")}]'
+    timeout: 60
+
+watches:
+  - name: new_transactions
+    description: new transactions on their cards and bank accounts in Link
+    kind: item
+    # A card transaction often appears a day or two after the day it is
+    # dated, so each look reaches three days back; what was already seen is
+    # not judged again.
+    overlap: 72h
+    guidance: |
+      Worth telling now: a charge they may not have made - a merchant they do not use, a place far from where they live, a run of small charges from one merchant, a large charge out of their usual pattern. Worth telling today: a refund or a deposit they are likely waiting for, a payment to them, a fee or interest charge, a charge noticeably larger than they usually pay that merchant. Not worth telling: their ordinary spending - groceries, restaurants, subscriptions and bills they pay every month, transfers between their own accounts - which is nearly everything.
+    list: {tool: link_new_transactions}
 ---
 
 # Link

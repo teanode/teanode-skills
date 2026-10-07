@@ -186,6 +186,30 @@ tools:
           type: shell
           command: [gh, search, issues, "{{query}}", --limit, "20", --json, "number,title,repository,state,updatedAt,url"]
           timeout: 60
+
+  - name: github_notifications
+    description: The person's unread GitHub notifications updated since a moment - review requests, mentions, assignments, failed checks on their own work, security alerts - each with the repository, why they were notified, and what it is about.
+    type: shell
+    parameters:
+      type: object
+      properties:
+        since:
+          type: string
+          description: The moment to look from, as 2026-01-31T09:00:00Z
+      required: ["since"]
+    # Shaped into the items a watch reads. A notification keeps its id as
+    # its thread gets new activity, and its update time is its version, so
+    # new activity is looked at again.
+    command: [gh, api, "notifications?all=false&per_page=50&since={{since}}", --jq, '[.[] | {id, version: .updated_at, at: .updated_at, from: .repository.full_name, title: .subject.title, text: ("GitHub notification: \(.reason) on a \(.subject.type) in \(.repository.full_name): \(.subject.title)"), url: ((.subject.url // .repository.html_url) | sub("https://api.github.com/repos/"; "https://github.com/") | sub("/pulls/"; "/pull/"))}]']
+    timeout: 60
+
+watches:
+  - name: new_notifications
+    description: new GitHub notifications
+    kind: item
+    guidance: |
+      Worth telling now: a security alert on one of their repositories, a production deployment or release failing. Worth telling today: a review requested of them, a direct mention or a question to them, an issue or pull request assigned to them, checks failing on their own pull request, a comment on their own pull request asking for changes. Not worth telling: activity on threads they are only subscribed to or watching, bots, dependency updates, merges by others that ask nothing of them.
+    list: {tool: github_notifications}
 ---
 
 This runs gh on the person's own computer, as them. There is no token in
