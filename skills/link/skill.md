@@ -80,7 +80,7 @@ tools:
           timeout: 60
 
   - name: link_accounts
-    description: The person's money in Link - balances of their connected accounts (in cents, with when each was read), the connected sources themselves, or the payment methods in their Link wallet (brand and last four digits only).
+    description: The person's money in Link - balances of their connected accounts (in cents, with when each was read), the connected sources themselves, or the payment methods in their Link wallet (brand and last four digits only). balances answers one entry per connected account, each with its balances or, when Link could not read that one, the error for it alone.
     type: workflow
     actionField: action
     parameters:
@@ -92,11 +92,22 @@ tools:
           description: balances reads what each connected account holds or owes; sources lists the connected accounts; payment_methods lists the cards and banks Link can pay with
       required: ["action"]
     actions:
+      # Read one account at a time: link-cli refuses a whole listing when
+      # any one account comes back in a shape it does not expect, and one
+      # account it cannot read should not hide the others.
       balances:
         - name: balances
           type: shell
-          command: [link-cli, balances, list, --limit, "100", --format, json]
-          timeout: 60
+          command:
+            - sh
+            - -c
+            - |
+              link-cli sources list --limit 100 --format json | jq -c '.data[]? | {id, name, type}' | while IFS= read -r source; do
+                answer=$(link-cli balances list --source "$(printf '%s' "$source" | jq -r .id)" --format json 2>&1)
+                printf '%s' "$answer" | jq -c --argjson source "$source" 'if type == "object" and has("data") then {source: $source, balances: .data} else {source: $source, error: (.message? // .)} end' 2>/dev/null \
+                  || jq -nc --argjson source "$source" --arg text "$answer" '{source: $source, error: $text}'
+              done | jq -s '{data: .}'
+          timeout: 90
       sources:
         - name: sources
           type: shell
